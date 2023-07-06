@@ -1,0 +1,278 @@
+USE [NOMBRE DE LA BDD AQUI]
+GO
+
+/****** Object:  Table [dbo].[Actor]    Script Date: 06/07/2023 15:56:58 ******/
+BEGIN TRAN
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Actor](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](10) NOT NULL,
+	[Apellido] [varchar](10) NOT NULL,
+ CONSTRAINT [PK_Actor] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ActorObra](
+	[IdActor] [int] NOT NULL,
+	[IdObra] [int] NOT NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Alquiler](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FechaLimite] [datetime] NULL,
+	[FechaInicio] [datetime] NOT NULL,
+	[ImporteTotal] [smallmoney] NOT NULL,
+	[IdVendedor] [int] NOT NULL,
+	[IdCliente] [int] NOT NULL,
+ CONSTRAINT [PK_Alquiler] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Calidad](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Descripcion] [varchar](20) NOT NULL,
+ CONSTRAINT [PK_Calidad] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Clasificacion](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Descripcion] [varchar](10) NULL,
+ CONSTRAINT [PK_Clasificacion] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Cliente](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](50) NULL,
+	[Apellido1] [varchar](50) NULL,
+	[Apellido2] [varchar](50) NULL,
+	[Telefono] [varchar](10) NOT NULL,
+	[FechaNacimiento] [date] NOT NULL,
+	[Direccion] [varchar](200) NULL,
+	[Ciudad] [varchar](20) NULL,
+	[DNI] [char](10) NOT NULL,
+ CONSTRAINT [PK_Cliente] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+ CONSTRAINT [UK_Cliente] UNIQUE NONCLUSTERED 
+(
+	[DNI] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Copia](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[IdObra] [int] NOT NULL,
+	[IdCalidad] [int] NOT NULL,
+ CONSTRAINT [PK_Copia] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CopiaAlquiler](
+	[IdCopia] [int] NOT NULL,
+	[IdAlquiler] [int] NOT NULL,
+	[FechaDevolucion] [datetime] NOT NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Genero](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Descripcion] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Genero] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Obra](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Titulo] [varchar](100) NOT NULL,
+	[IdProductora] [int] NOT NULL,
+	[IdClasificacion] [int] NOT NULL,
+	[IdRelevancia] [int] NOT NULL,
+ CONSTRAINT [PK_Obra] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ObraGenero](
+	[IdObra] [int] NOT NULL,
+	[IdGenero] [int] NOT NULL
+) ON [PRIMARY]
+GO
+
+
+CREATE TABLE [dbo].[Productora](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Descripcion] [varchar](10) NOT NULL,
+ CONSTRAINT [PK_Productora] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Relevancia](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Descripcion] [varchar](50) NULL,
+ CONSTRAINT [PK_Relevancia] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[RelevanciaCalidad](
+	[IdRelevancia] [int] NOT NULL,
+	[IdCalidad] [int] NOT NULL,
+	[Precio] [smallmoney] NOT NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Vendedor](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](10) NOT NULL,
+	[Apellido1] [varchar](50) NOT NULL,
+	[Apellido2] [varchar](50) NOT NULL,
+	[NumEmpleado] [smallint] NOT NULL,
+ CONSTRAINT [PK_Table_1] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+ALTER TABLE [dbo].[RelevanciaCalidad]  WITH CHECK ADD  CONSTRAINT [FK_RelevanciaCalidad_Calidad] FOREIGN KEY([IdCalidad])
+REFERENCES [dbo].[Calidad] ([Id])
+GO
+
+ALTER TABLE [dbo].[RelevanciaCalidad] CHECK CONSTRAINT [FK_RelevanciaCalidad_Calidad]
+GO
+
+ALTER TABLE [dbo].[RelevanciaCalidad]  WITH CHECK ADD  CONSTRAINT [FK_RelevanciaCalidad_Relevancia] FOREIGN KEY([IdRelevancia])
+REFERENCES [dbo].[Relevancia] ([Id])
+GO
+
+ALTER TABLE [dbo].[RelevanciaCalidad] CHECK CONSTRAINT [FK_RelevanciaCalidad_Relevancia]
+GO
+
+
+ALTER TABLE [dbo].[ObraGenero]  WITH CHECK ADD  CONSTRAINT [FK_ObraGenero_Genero] FOREIGN KEY([IdGenero])
+REFERENCES [dbo].[Genero] ([Id])
+GO
+
+ALTER TABLE [dbo].[ObraGenero] CHECK CONSTRAINT [FK_ObraGenero_Genero]
+GO
+
+ALTER TABLE [dbo].[ObraGenero]  WITH CHECK ADD  CONSTRAINT [FK_ObraGenero_Obra] FOREIGN KEY([IdObra])
+REFERENCES [dbo].[Obra] ([Id])
+GO
+
+ALTER TABLE [dbo].[ObraGenero] CHECK CONSTRAINT [FK_ObraGenero_Obra]
+GO
+
+ALTER TABLE [dbo].[Obra]  WITH CHECK ADD  CONSTRAINT [FK_Obra_Clasificacion] FOREIGN KEY([IdClasificacion])
+REFERENCES [dbo].[Clasificacion] ([Id])
+GO
+
+ALTER TABLE [dbo].[Obra] CHECK CONSTRAINT [FK_Obra_Clasificacion]
+GO
+
+ALTER TABLE [dbo].[Obra]  WITH CHECK ADD  CONSTRAINT [FK_Obra_Relevancia] FOREIGN KEY([IdRelevancia])
+REFERENCES [dbo].[Relevancia] ([Id])
+GO
+
+ALTER TABLE [dbo].[Obra] CHECK CONSTRAINT [FK_Obra_Relevancia]
+GO
+
+
+ALTER TABLE [dbo].[CopiaAlquiler]  WITH CHECK ADD  CONSTRAINT [FK_CopiaAlquiler_Alquiler] FOREIGN KEY([IdAlquiler])
+REFERENCES [dbo].[Alquiler] ([Id])
+GO
+
+ALTER TABLE [dbo].[CopiaAlquiler] CHECK CONSTRAINT [FK_CopiaAlquiler_Alquiler]
+GO
+
+ALTER TABLE [dbo].[CopiaAlquiler]  WITH CHECK ADD  CONSTRAINT [FK_CopiaAlquiler_Copia] FOREIGN KEY([IdCopia])
+REFERENCES [dbo].[Copia] ([Id])
+GO
+
+ALTER TABLE [dbo].[CopiaAlquiler] CHECK CONSTRAINT [FK_CopiaAlquiler_Copia]
+GO
+
+ALTER TABLE [dbo].[ActorObra]  WITH CHECK ADD  CONSTRAINT [FK_ActorObra_Actor] FOREIGN KEY([IdActor])
+REFERENCES [dbo].[Actor] ([Id])
+GO
+
+ALTER TABLE [dbo].[ActorObra] CHECK CONSTRAINT [FK_ActorObra_Actor]
+GO
+
+ALTER TABLE [dbo].[ActorObra]  WITH CHECK ADD  CONSTRAINT [FK_ActorObra_Obra] FOREIGN KEY([IdObra])
+REFERENCES [dbo].[Obra] ([Id])
+GO
+
+ALTER TABLE [dbo].[ActorObra] CHECK CONSTRAINT [FK_ActorObra_Obra]
+GO
+
+ALTER TABLE [dbo].[Alquiler]  WITH CHECK ADD  CONSTRAINT [FK_Alquiler_Cliente] FOREIGN KEY([IdCliente])
+REFERENCES [dbo].[Cliente] ([Id])
+GO
+
+ALTER TABLE [dbo].[Alquiler] CHECK CONSTRAINT [FK_Alquiler_Cliente]
+GO
+
+ALTER TABLE [dbo].[Alquiler]  WITH CHECK ADD  CONSTRAINT [FK_Alquiler_Vendedor] FOREIGN KEY([IdVendedor])
+REFERENCES [dbo].[Vendedor] ([Id])
+GO
+
+ALTER TABLE [dbo].[Alquiler] CHECK CONSTRAINT [FK_Alquiler_Vendedor]
+GO
+
+ALTER TABLE [dbo].[Copia]  WITH CHECK ADD  CONSTRAINT [FK_Copia_Calidad] FOREIGN KEY([IdCalidad])
+REFERENCES [dbo].[Calidad] ([Id])
+GO
+
+ALTER TABLE [dbo].[Copia] CHECK CONSTRAINT [FK_Copia_Calidad]
+GO
+
+ALTER TABLE [dbo].[Copia]  WITH CHECK ADD  CONSTRAINT [FK_Copia_Obra] FOREIGN KEY([IdObra])
+REFERENCES [dbo].[Obra] ([Id])
+GO
+
+ALTER TABLE [dbo].[Copia] CHECK CONSTRAINT [FK_Copia_Obra]
+GO
+
+ALTER TABLE [dbo].[Obra]  WITH CHECK ADD  CONSTRAINT [FK_Obra_Productora] FOREIGN KEY([IdProductora])
+REFERENCES [dbo].[Productora] ([Id])
+GO
+
+COMMIT TRAN
