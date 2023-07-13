@@ -1,19 +1,10 @@
-USE [AQUI LA BASE DE DATOS]
+USE CompAerea
 GO
-
-/****** Object:  Table [dbo].[Aeropuerto]    Script Date: 06/07/2023 19:31:48 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-BEGIN TRAN
 
 CREATE TABLE [dbo].[Aeropuerto](
-	[IdAeropuerto] [int] NOT NULL,
-	[NombreAeropuerto] [varchar](50) NULL,
-	[CodigoAeropuerto] [varchar](10) NULL,
+	[IdAeropuerto] [int] NOT NULL IDENTITY(1,1),
+	[NombreAeropuerto] [varchar](50) NOT NULL,
+	[CodigoAeropuerto] [varchar](10) NOT NULL UNIQUE,
 PRIMARY KEY CLUSTERED 
 (
 	[IdAeropuerto] ASC
@@ -21,18 +12,21 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-
 CREATE TABLE [dbo].[AuxiliarVuelo](
+	[IdAuxiliarVuelo] [int] NOT NULL IDENTITY(1,1),
 	[RIdVuelo] [int] NOT NULL,
 	[RIdAuxiliar] [int] NOT NULL
+PRIMARY KEY CLUSTERED
+(
+[IdAuxiliarVuelo] ASC 
+) 
 ) ON [PRIMARY]
 GO
 
-
 CREATE TABLE [dbo].[Avion](
-	[IdAvion] [int] NOT NULL,
-	[Nombre] [varchar](50) NULL,
-	[RIdModelo] [int] NOT NULL,
+	[IdAvion] [int] NOT NULL IDENTITY(1,1),
+	[Nombre] [varchar](50) NOT NULL,
+	[RIdModelo] [int] NOT NULL UNIQUE,
 PRIMARY KEY CLUSTERED 
 (
 	[IdAvion] ASC
@@ -41,8 +35,8 @@ PRIMARY KEY CLUSTERED
 GO
 
 CREATE TABLE [dbo].[CargoAuxiliar](
-	[IdCargoAuxiliar] [int] NOT NULL,
-	[Tipo] [varchar](50) NULL,
+	[IdCargoAuxiliar] [int] NOT NULL IDENTITY(1,1),
+	[Tipo] [varchar](50) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[IdCargoAuxiliar] ASC
@@ -50,10 +44,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-
 CREATE TABLE [dbo].[Clase](
-	[IdClase] [int] NOT NULL,
-	[TipoClase] [varchar](50) NULL,
+	[IdClase] [int] NOT NULL IDENTITY(1,1),
+	[TipoClase] [varchar](50) NULL UNIQUE,
 PRIMARY KEY CLUSTERED 
 (
 	[IdClase] ASC
@@ -62,17 +55,22 @@ PRIMARY KEY CLUSTERED
 GO
 
 CREATE TABLE [dbo].[ClaseVuelo](
+	[IdClaseVuelo] [int] NOT NULL IDENTITY(1,1),
 	[Precio] [float] NULL,
 	[FilaInicial] [int] NULL,
 	[FilaFinal] [int] NULL,
 	[RIdVuelo] [int] NOT NULL,
 	[RIdClase] [int] NOT NULL
+PRIMARY KEY CLUSTERED 
+(
+	[IdClaseVuelo] ASC
+)
 ) ON [PRIMARY]
 GO
 
 CREATE TABLE [dbo].[Modelo](
-	[IdModelo] [int] NOT NULL,
-	[Codigo] [varchar](10) NULL,
+	[IdModelo] [int] NOT NULL IDENTITY(1,1),
+	[Codigo] [varchar](20) NOT NULL,
 	[Capacidad] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -82,10 +80,11 @@ PRIMARY KEY CLUSTERED
 GO
 
 CREATE TABLE [dbo].[Pasajero](
-	[IdPasajero] [int] NOT NULL,
+	[IdPasajero] [int] NOT NULL IDENTITY(1,1),
 	[NumeroAsiento] [varchar](10) NULL,
 	[NombrePasajero] [varchar](50) NULL,
-	[NumeroDocuento] [varchar](10) NULL,
+	[RIdTipoDoc] [int] NOT NULL,
+	[NumeroDocumento] [varchar](10) NULL,
 	[FechaReserva] [date] NULL,
 	[RIdVuelo] [int] NOT NULL,
 PRIMARY KEY CLUSTERED 
@@ -96,7 +95,7 @@ PRIMARY KEY CLUSTERED
 GO
 
 CREATE TABLE [dbo].[PersonalAuxiliar](
-	[IdAuxiliar] [int] NOT NULL,
+	[IdAuxiliar] [int] NOT NULL IDENTITY(1,1),
 	[NIF] [varchar](10) NULL,
 	[Nombre] [varchar](50) NULL,
 	[RIdCargoAuxiliar] [int] NOT NULL,
@@ -108,7 +107,7 @@ PRIMARY KEY CLUSTERED
 GO
 
 CREATE TABLE [dbo].[Piloto](
-	[IdPiloto] [int] NOT NULL,
+	[IdPiloto] [int] NOT NULL IDENTITY(1,1),
 	[NIF] [varchar](10) NULL,
 	[FechaAlta] [date] NULL,
 	[ServicioIntercontinental] [bit] NULL,
@@ -121,11 +120,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-
 CREATE TABLE [dbo].[TipoDocumento](
-	[IdTipoDocumento] [int] NOT NULL,
-	[NombreDocumento] [varchar](10) NULL,
-	[RIdPasajero] [int] NOT NULL,
+	[IdTipoDocumento] [int] NOT NULL IDENTITY(1,1),
+	[NombreDocumento] [varchar](30) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[IdTipoDocumento] ASC
@@ -134,7 +131,7 @@ PRIMARY KEY CLUSTERED
 GO
 
 CREATE TABLE [dbo].[Vuelo](
-	[IdVuelo] [int] NOT NULL,
+	[IdVuelo] [int] NOT NULL IDENTITY(1,1),
 	[Codigo] [varchar](10) NULL,
 	[Fecha] [date] NULL,
 	[Duracion] [int] NULL,
@@ -170,11 +167,8 @@ ALTER TABLE [dbo].[Vuelo]  WITH CHECK ADD FOREIGN KEY([RIdSalida])
 REFERENCES [dbo].[Aeropuerto] ([IdAeropuerto])
 GO
 
-
-
-
-ALTER TABLE [dbo].[TipoDocumento]  WITH CHECK ADD FOREIGN KEY([RIdPasajero])
-REFERENCES [dbo].[Pasajero] ([IdPasajero])
+ALTER TABLE [dbo].[Pasajero]  ADD FOREIGN KEY([RIdTipoDoc])
+REFERENCES [dbo].[TipoDocumento] ([IdTipoDocumento])
 GO
 
 
@@ -207,4 +201,4 @@ ALTER TABLE [dbo].[Avion]  WITH CHECK ADD FOREIGN KEY([RIdModelo])
 REFERENCES [dbo].[Modelo] ([IdModelo])
 GO
 
-COMMIT
+--COMMIT
